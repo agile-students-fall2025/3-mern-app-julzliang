@@ -7,6 +7,8 @@ const mongoose = require('mongoose')
 const app = express() // instantiate an Express object
 app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' })) // log all incoming requests, except when in unit test mode.  morgan has a few logging default styles - dev is a nice concise color-coded style
 app.use(cors()) // allow cross-origin resource sharing
+app.use('/images', express.static('public'));
+
 
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()) // decode JSON-formatted incoming POST data
@@ -77,6 +79,17 @@ app.post('/messages/save', async (req, res) => {
     })
   }
 })
+
+// a route to handle fetching About Us info
+app.get('/api/about', (req, res) => {
+  res.json({
+    name: "Julz Liang",
+    title: "Computer Science + Game Design @ NYU",
+    bio: `Hi, I am Julz Liang, a senior studying Computer Science and Game Design. I love combining creative arts with technology. I enjoy listening to music, playing with my pet cat, and planning events to bring community together. My long-term goal is to design applications that are intuitive and accessible. I hope to make meaningful impact in the future.`,
+    imageUrl: "http://localhost:5002/images/JulzLiang-Headshot.png" 
+  });
+});
+
 
 // export the express app we created to make it available to other modules
 module.exports = app // CommonJS export style!
